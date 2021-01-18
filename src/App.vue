@@ -1,3 +1,5 @@
+
+
 <template>
   <div id="app">
     <h1>Hello from ag-Grid!</h1>
@@ -11,6 +13,7 @@
 
 <script>
 import { AgGridVue } from "ag-grid-vue";
+import axios from 'axios';
 
 export default {
   name: 'App',
@@ -23,17 +26,27 @@ export default {
   components: {
     AgGridVue
   },
-  beforeMount() {
+  async beforeMount() {
     this.columnDefs = [
       { headerName: 'Make', field: 'make',   sortable: true, filter: true },
       { headerName: 'Model', field: 'model', sortable: true, filter: true },
       { headerName: 'Price', field: 'price', sortable: true, filter: true },
-    ],
-    this.rowData = [
-      { make: 'Toyota', model: 'Celica', price: 35000 },
-      { make: 'Ford', model: 'Mondeo', price: 32000 },
-      { make: 'Porsche', model: 'Boxter', price: 72000 },
-    ]
+    ];
+
+    // this.rowData = [
+    //   { make: 'Toyota', model: 'Celica', price: 35000 },
+    //   { make: 'Ford', model: 'Mondeo', price: 32000 },
+    //   { make: 'Porsche', model: 'Boxter', price: 72000 },
+    // ]
+
+
+    const res = await axios.get(":8123/?query=select * from aggrid.cars FORMAT JSON")
+    console.log(res.data)
+    debugger
+    this.rowData = res.data.data.map(r => {
+      return { make: r.make, model: r.model, price: r.price}
+    })
+
   }
 
 }
