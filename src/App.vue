@@ -42,7 +42,6 @@ export default {
 
     const res = await axios.get(":8123/?query=select * from aggrid.cars FORMAT JSON")
     console.log(res.data)
-    debugger
     this.rowData = res.data.data.map(r => {
       return { make: r.make, model: r.model, price: r.price}
     })
